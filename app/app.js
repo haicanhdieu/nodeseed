@@ -1,6 +1,13 @@
+var path = require('path');
+
+// Global
+global.rootRequire = function(name) {
+  return require(path.join(__dirname, name));
+};
+
+//Apps
 var express = require('express');
 var router = express.Router();
-var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -29,37 +36,47 @@ var getDirs = Promise.promisify(fileUtil.getDirs);
 getDirs(path.join(__dirname, 'plugin')).then(function (dirs) {
   dirs.forEach(function (dir) {
     console.log('Load Plugin - ' + dir);
-    var plugin = require(dir);
-    if(plugin.routes && plugin.routes.length) {
-      plugin.routes.forEach(function (route) {
-        var routeMod = route.controllers;
-        if (!routeMod) return;
+    try {
+      var plugin = require(dir);
 
-        for (var method in routeMod) {
-          //get router method
-          var routerFunc = router[method];
-          if (!routerFunc) continue;
-          //decoration middleware function
-          var routerDeco = (function (method) {
-            return function (req, res, next) {
+      // load static
+      app.use(plugin.rootRoute + "/static", express.static(path.join(plugin.rootPath, '/static')));
+      // load Routes
+      if (plugin.routes && plugin.routes.length) {
+        plugin.routes.forEach(function (route) {
+          var routeMod = route.controllers;
+          if (!routeMod) return;
 
-              if (req.baseUrl == '' && plugin.rootRoute != '/') {
-                res.redirect(plugin.rootRoute + req.url);
-              }
-              else {
-                //res.locals.getTemplatePath = appConfig.getTemplatePath.bind(appConfig);
-                //res.locals.getSkinPath = appConfig.getSkinPath.bind(appConfig);
-                return routeMod[method](req, res, next, plugin);
-              }
-            };
-          })(method);
+          for (var method in routeMod) {
+            //get router method
+            var routerFunc = router[method];
+            if (!routerFunc) continue;
+            //decoration middleware function
+            var routerDeco = (function (method) {
+              return function (req, res, next) {
 
-          routerFunc.call(router, route.slug, routerDeco);
-        }
+                if (req.baseUrl == '' && plugin.rootRoute != '/') {
+                  res.redirect(plugin.rootRoute + req.url);
+                }
+                else {
+                  //res.locals.getTemplatePath = appConfig.getTemplatePath.bind(appConfig);
+                  //res.locals.getSkinPath = appConfig.getSkinPath.bind(appConfig);
+                  return routeMod[method](req, res, next, plugin);
+                }
+              };
+            })(method);
 
-      });
+            routerFunc.call(router, route.slug, routerDeco);
+          }
+
+        });
+      }
+      app.use(plugin.rootRoute, router);
     }
-    app.use(plugin.rootRoute, router);
+    catch (ex){
+      console.log('Load Error: ' + ex.message);
+    }
+
   });
 }).finally(function () {
 
