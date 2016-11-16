@@ -58,4 +58,16 @@ html
         script(src='//npmcdn.com/react-router@2.4.0/umd/ReactRouter.min.js')
 
         //nodeseed
-        script(type='text/babel', src=plugin.rootRoute + '/client/index.jsx')
+        if config.mode == 'production'
+            script(type='text/babel', src=plugin.rootRoute + '/client/bin/bundle.jsx')
+        else
+            script.
+                var config = {
+                    mode: '#{config.mode}'
+                };
+                var module = {
+                    exports: function(obj) {
+
+                    }
+                };
+            script(type='text/babel', src=plugin.rootRoute + '/client/index.jsx')

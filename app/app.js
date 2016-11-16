@@ -95,7 +95,8 @@ getDirs(path.join(__dirname, 'plugin')).then(function (dirs) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    //res.render('error');
+    res.send(err);
   });
 
 });
