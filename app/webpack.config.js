@@ -4,12 +4,14 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        "plugin/admin/client/bin/bundle.jsx": "./plugin/admin/client/index.jsx"
+        "plugin/admin/client/bin/bundle.js": "./plugin/admin/client/index.jsx"
     },
     output: {
         path: __dirname,
         filename: "[name]"
     },
+    debug: true,
+    devtool: "#eval-source-map",
     module: {
         loaders: [
             {
