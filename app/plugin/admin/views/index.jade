@@ -52,9 +52,29 @@ html
         script(src=plugin.rootRoute + '/client/libs/adminlte/js/demo.js')
 
         //React
-        script(src='/bower_components/react/react.min.js')
-        script(src='/bower_components/react/react-dom.min.js')
-        script(src='/bower_components/babel/browser.min.js')
+        //script(src='/bower_components/react/react.min.js')
+        //script(src='/bower_components/react/react-dom.min.js')
+        //script(src='/bower_components/babel/browser.min.js')
 
+        //systemjs
+        script(src='/bower_components/system.js/dist/system.js')
         //nodeseed
-        script(type='text/babel', src=plugin.rootRoute + '/client/bin/bundle.js')
+        script.
+            // set our baseURL reference path
+            SystemJS.config({
+                baseURL: '#{plugin.rootRoute }/client',
+                transpiler: "babel",
+
+                map: {
+                    traceur: '/bower_components/traceur',
+                    react: '/bower_components/react/react.min.js',
+                    'react-dom': '/bower_components/react/react-dom.min.js',
+                    babel: '/bower_components/babel/browser.min.js',
+
+                }
+            });
+
+            // loads /js/main.js
+            SystemJS.import('index.jsx');
+
+        //script(type='text/babel', src=plugin.rootRoute + '/client/bin/bundle.js')

@@ -6,6 +6,6 @@ module.exports = _.extend({
     pluginName: 'admin',
     rootRoute: '/admin',
     routes: [
-        {slug: '/', controllers: require('./controllers/home')}
+        {slug: '/', controllers: require('./controllers/home')},
     ]
 }, plugin);

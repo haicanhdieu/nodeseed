@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www dev"
+    "start": "node ./bin/www dev",
+    "debug": "nodemon -L --debug ./bin/www dev"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
