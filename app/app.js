@@ -29,6 +29,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
 
 // Scan and load plugins
@@ -95,7 +97,8 @@ getDirs(path.join(__dirname, 'plugin')).then(function (dirs) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    //res.render('error');
+    res.send(err);
   });
 
 });
