@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Base from './components/layout/base.jsx';
+import { Router, browserHistory } from 'react-router'
 
 ReactDOM.render(
-    <Base />,
+    <Router history={browserHistory}>
+
+    </Router>,
     document.getElementById('container')
 );
