@@ -55,20 +55,7 @@ html
         //systemjs
         script(src='/node_modules/systemjs/dist/system.js')
         //nodeseed
+        script(src=plugin.rootRoute + '/client/system.js')
         script.
-            // set our baseURL reference path
-            SystemJS.config({
-                baseURL: '#{plugin.rootRoute }/client',
-                transpiler: "babel",
+            systemJSConfig('#{plugin.rootRoute }');
 
-                map: {
-                    'babel': '/node_modules/babel-core/browser.min.js',
-                    'react': '/node_modules/react/dist/react.min.js',
-                    'react-dom': '/node_modules/react-dom/dist/react-dom.min.js',
-                    'react-router': '/node_modules/react-router/umd/ReactRouter.js',
-                },
-
-            });
-
-            // loads /js/main.js
-            SystemJS.import('index.jsx');
