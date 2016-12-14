@@ -42,7 +42,7 @@ getDirs(path.join(__dirname, 'plugin')).then(function (dirs) {
       var plugin = require(dir);
 
       // load static
-      app.use(plugin.rootRoute + "/client", express.static(path.join(plugin.rootPath, '/client')));
+      app.use(plugin.joinUrl("/client"), express.static(path.join(plugin.rootPath, '/client')));
       // load Routes
       if (plugin.routes && plugin.routes.length) {
         plugin.routes.forEach(function (route) {
